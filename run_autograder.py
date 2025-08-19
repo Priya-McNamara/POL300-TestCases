@@ -7,6 +7,7 @@ import os
 
 # Folder containing test files
 TEST_FOLDER = '/autograder/tests'
+sys.path.insert(0, TEST_FOLDER)  # Add tests folder to path
 
 # Redirect stdout to capture test print statements
 old_stdout = sys.stdout
