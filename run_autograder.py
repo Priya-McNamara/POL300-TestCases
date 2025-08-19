@@ -15,7 +15,7 @@ sys.stdout = mystdout = io.StringIO()
 
 # Discover all tests
 loader = unittest.TestLoader()
-suite = loader.discover(TEST_FOLDER, pattern='*.py')
+suite = loader.discover(start_dir="./tests", pattern="*.py", top_level_dir=".")
 
 # Custom TestResult to track passes
 class GradescopeResult(unittest.TextTestResult):
