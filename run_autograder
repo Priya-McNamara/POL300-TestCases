@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# run_autograder - Run the autograder
+
+# Fail fast
+set -e
+
+# Make a working directory
+mkdir -p /autograder/results
+mkdir -p /autograder/source
+
+# Copy student submission into /autograder/source
+cp -r /autograder/submission/* /autograder/source/
+
+# Copy your test files (which you’ll put in the repo next to setup.sh & run_autograder)
+cp /autograder/tests/*.py /autograder/source/
+
+cd /autograder/source
+
+# Run the tests and capture JSON results
+python3 -m unittest discover -v > /autograder/results/results.txt 2>&1
+
+# Gradescope requires results.json (optional for richer output).
+# Here’s a simple wrapper that converts unittest output into Gradescope JSON.
+# For now, just dump everything into results.txt:
+echo '{"score": 1.0, "output": "See results.txt"}' > /autograder/results/results.json
