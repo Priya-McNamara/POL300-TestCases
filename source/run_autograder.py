@@ -6,16 +6,12 @@ import io
 import os
 
 # Folder containing test files
-TEST_FOLDER = '/autograder/tests'
-sys.path.insert(0, TEST_FOLDER)  # Add tests folder to path
+TEST_FOLDER = './source/tests'
+sys.path.insert(0, TEST_FOLDER)  # add tests folder to path
 
 # Redirect stdout to capture test print statements
 old_stdout = sys.stdout
 sys.stdout = mystdout = io.StringIO()
-
-# Discover all tests
-loader = unittest.TestLoader()
-suite = loader.discover(start_dir="./tests", pattern="*.py", top_level_dir=".")
 
 # Custom TestResult to track passes
 class GradescopeResult(unittest.TextTestResult):
@@ -27,7 +23,10 @@ class GradescopeResult(unittest.TextTestResult):
         super().addSuccess(test)
         self.successes.append(test)
 
-# Run tests
+# Discover and run tests
+loader = unittest.TestLoader()
+suite = loader.discover(start_dir=TEST_FOLDER, pattern="*.py", top_level_dir='.')
+
 runner = unittest.TextTestRunner(stream=sys.stdout, verbosity=2, resultclass=GradescopeResult)
 result = runner.run(suite)
 
@@ -35,11 +34,10 @@ result = runner.run(suite)
 sys.stdout = old_stdout
 test_output = mystdout.getvalue()
 
-# Prepare Gradescope JSON
+# Prepare Gradescope JSON results
 gradescope_results = {"tests": []}
 
-# Add passing tests
-for test in result.successes:
+for test in getattr(result, 'successes', []):
     gradescope_results["tests"].append({
         "name": str(test),
         "score": 1,
@@ -47,7 +45,6 @@ for test in result.successes:
         "output": "Pass"
     })
 
-# Add failed tests
 for test, err in result.failures + result.errors:
     gradescope_results["tests"].append({
         "name": str(test),
@@ -59,7 +56,7 @@ for test, err in result.failures + result.errors:
 # Ensure results folder exists
 os.makedirs('/autograder/results', exist_ok=True)
 
-# Write JSON
+# Write JSON output
 with open('/autograder/results/results.json', 'w') as f:
     json.dump(gradescope_results, f, indent=2)
 

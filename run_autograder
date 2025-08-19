@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# run_autograder - Main entry point for Gradescope autograder
+
 set -e
+
+# Ensure results folder exists
 mkdir -p /autograder/results
+
+# Run the Python autograder
 python3 /autograder/source/run_autograder.py
