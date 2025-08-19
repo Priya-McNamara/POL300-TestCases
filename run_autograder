@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
 set -e
-
-# Create results folder
 mkdir -p /autograder/results
-
-# Go to student submission folder
-cd /autograder/submission
-
-# Run all tests from the tests/ folder in the ZIP
-python3 -m unittest discover -s /autograder/tests -p "*.py" -v > /autograder/results/results.txt 2>&1
-
-# Minimal JSON output for Gradescope
-echo '{"score": 1.0, "output": "See results.txt"}' > /autograder/results/results.json
+python3 /autograder/run_autograder.py
