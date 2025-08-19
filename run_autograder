@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 mkdir -p /autograder/results
-python3 /autograder/run_autograder.py
+python3 /autograder/source/run_autograder.py
